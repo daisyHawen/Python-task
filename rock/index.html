@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+        }
+
+        img {
+            width: 100px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        p {
+            margin-top: 10px;
+        }
+
+        .container {
+            width: 520px;
+            height: 420px;
+            position: absolute;
+            left: 35%;
+            top: 25%;
+            background: #496169;
+            text-align: center;
+        }
+
+        .float-left-div {
+            width: 225px;
+            height: 150px;
+            background: #A0E1AC;
+            float: left;
+        }
+
+        .computer {
+            width: 225px;
+            height: 150px;
+            background: #A0E1AC;
+            float: left;
+        }
+
+        .center-div {
+            width: 70px;
+            height: 150px;
+            background: #F2ECE4;
+            float: left;
+            line-height: 140px;
+        }
+
+        .result {
+            height: 80px;
+            background: #E7F2A7;
+            line-height: 80px;
+            clear: both;
+            color: black;
+            font-weight: bolder;
+            font-size: 25px;
+        }
+
+        .button {
+            height: 50px;
+            margin-top: 20px;
+        }
+
+        .allResult {
+            line-height: 40px;
+            color: lightyellow;
+        }
+    </style>
+    <script type="text/javascript">
+        //全局变量
+        var totalCount = 0;//总局数
+        var winCount = 0;//赢数
+        var failCount = 0;//输数
+        var drawCount = 0;//平局数
+
+        /**
+         * 选择剪刀石头布
+         */
+        function selectOne(obj) {
+            var currentChoiceImg = document.getElementById("currentChoice");
+            changeImg(currentChoiceImg, obj.value);
+        }
+
+        /**
+         * 改变图片
+         */
+        function changeImg(imgObj, value) {
+            switch (value) {
+                case "-1":
+                    imgObj.style.display = "none";
+                    break;
+                case "0":
+                    imgObj.style.display = "inline";
+                    imgObj.src = "jiandao.png";
+                    break;
+                case "1":
+                    imgObj.style.display = "inline";
+                    imgObj.src = "shitou.png";
+                    break;
+                case "2":
+                    imgObj.style.display = "inline";
+                    imgObj.src = "bu.png";
+                    break;
+            }
+        }
+
+        function begin() {
+            var selectValue = document.getElementById("select").value;
+            if (selectValue == "-1") {
+                alert("请先选择出拳再开始！");
+                return;
+            }
+            //模拟电脑出拳
+            var computerValue = Math.round(Math.random() * 10) % 3;
+            var computerImgOjb = document.getElementById("history-computer");
+            var myImgObj = document.getElementById("history-my");
+            changeImg(computerImgOjb, computerValue + "");
+            changeImg(myImgObj, selectValue);
+            //计算输赢
+            check(selectValue, computerValue);
+        }
+
+        /**
+         * 计算输赢
+         */
+        function check(gesture1, gesture2) {
+            var result = gesture1 + "" + gesture2;
+//            alert(result)
+            switch (result) {
+                case "02":
+                case "10":
+                case "21":
+                    winCount++;
+                    document.getElementById("win").innerHTML = "" + winCount;
+                    document.getElementById("result").innerHTML = "你赢了！";
+//                    alert("赢了")
+                    break
+                case "11":
+                case "22":
+                case "00":
+                    drawCount++;
+                    document.getElementById("draw").innerHTML = "" + drawCount;
+                    document.getElementById("result").innerHTML = "打成平手！";
+//                    alert("平了")
+                    break
+                default :
+                    failCount++;
+                    document.getElementById("fail").innerHTML = "" + failCount;
+                    document.getElementById("result").innerHTML = "你输了！";
+//                    alert("输了")
+            }
+            totalCount++;
+            document.getElementById("allCount").innerHTML = "" + totalCount;
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="float-left-div">
+        <p>玩家</p>
+        <img id="history-my" src="jiandao.png">
+    </div>
+    <div class="center-div">
+        <p class="center-p">VS</p>
+    </div>
+    <div class="computer">
+        <p>电脑</p>
+        <img id="history-computer" src="jiandao.png">
+    </div>
+
+    <div class="result" id="result">
+    </div>
+
+    <div class="float-left-div">
+        <p>你选择了</p>
+        <img id="currentChoice" src="bu.png">
+    </div>
+    <div class="center-div">
+        <p class="center-p">choice</p>
+    </div>
+    <div class="float-left-div">
+        <p>请选择出拳：
+            <select id="select" onchange="selectOne(this)">
+                <option value="-1">请选择</option>
+                <option value="0">剪刀</option>
+                <option value="1">石头</option>
+                <option value="2">布</option>
+            </select>
+        </p>
+        <p>
+            <input class="button" type="button" value="想好了，开始出拳" onclick="begin()">
+        </p>
+    </div>
+    <div class="allResult">
+        总局数：<span id="allCount">0</span>
+        &nbsp;&nbsp;&nbsp;赢：<span id="win">0</span>
+        &nbsp;&nbsp;&nbsp;输：<span id="fail">0</span>
+        &nbsp;&nbsp;&nbsp;和：<span id="draw">0</span>
+    </div>
+</div>
+</body>
+</html>
